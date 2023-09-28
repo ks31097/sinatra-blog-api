@@ -31,9 +31,7 @@ class ApplicationController < Sinatra::Base
     status = [200, 201].include?(code) ? 'SUCCESS' : 'FAILED'
     headers['Content-Type'] = 'application/json' # content_type :json
 
-    if data
-      [ code, { data: data, message: status }.to_json ]
-    end
+    [code, { data: data, message: status }.to_json] if data
   end
 
   # @api: Format the json response db

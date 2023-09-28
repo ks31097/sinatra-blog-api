@@ -1,4 +1,6 @@
-require "sinatra/activerecord"
+# frozen_string_literal: true
+
+require 'sinatra/activerecord'
 
 class Article < ActiveRecord::Base
   belongs_to :user
