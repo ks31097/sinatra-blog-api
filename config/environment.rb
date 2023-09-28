@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Include all the gem listed in Gemfile
 
 require 'bundler'

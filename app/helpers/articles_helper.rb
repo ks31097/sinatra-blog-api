@@ -1,5 +1,6 @@
-module ArticlesHelper
+# frozen_string_literal: true
 
+module ArticlesHelper
   # @find all articles
   def find_articles
     Article.all
@@ -15,11 +16,10 @@ module ArticlesHelper
   # @format body data_json
   def data_json(created: false)
     payload = JSON.parse request.body.read
-      if created
-        payload['created_at'] = time_now
-        payload['updated_at'] = time_now
-      end
-
+    if created
+      payload['created_at'] = time_now
+      payload['updated_at'] = time_now
+    end
     payload
   end
 

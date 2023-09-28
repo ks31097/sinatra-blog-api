@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def server_time_run
-    DateTime.now.strftime("%d-%m-%Y %H:%M")
+    DateTime.now.strftime('%d-%m-%Y %H:%M')
   end
 
   def time_now

@@ -18,7 +18,7 @@ class ArticleController < ApplicationController
   # $curl 127.0.0.1:9292/articles_json
   get '/articles_json/?' do
     articles = find_articles
-    if articles.to_s.length > 0 then
+    if articles.to_s.length.positive?
       json_response(data: articles)
     else
       json_response(data: 'No articles have been created yet!')
@@ -27,56 +27,49 @@ class ArticleController < ApplicationController
 
   # @method: Add a new article to the DB
   # $curl -X POST 127.0.0.1:9292/articles_json/create -d '{}'
-  # $curl -X POST 127.0.0.1:9292/articles_json/create -d '{"id":8,"title":"Article","content":"This is new article","autor":"Autor"}'
+  # $curl -X POST 127.0.0.1:9292/articles_json/create -d \
+  # '{"id":8,"title":"Article","content":"This is new article","autor":"Autor"}'
   post '/articles_json/create/?' do
-    begin
-      article = Article.create( self.data_json(created: true) )
+    article = Article.create(data_json(created: true))
 
-      if sinatra_flash_error(article).length > 0 then
-        json_response_db(data: article, message: sinatra_flash_error(article))
-      else
-        json_response_db(data: article, message: 'Current article')
-      end
-    rescue => e
-      json_response(code: 422, data: { error: e.message })
+    if sinatra_flash_error(article).length.positive?
+      json_response_db(data: article, message: sinatra_flash_error(article))
+    else
+      json_response_db(data: article, message: 'Current article')
     end
+  rescue StandardError => e
+    json_response(code: 422, data: { error: e.message })
   end
 
   # @method: Display the article in json
   get '/articles_json/:id/?' do
-    begin
-      json_response(data: find_article)
-    rescue => e
-      json_response(code: 422, data: { error: e.message })
-    end
+    json_response(data: find_article)
+  rescue StandardError => e
+    json_response(code: 422, data: { error: e.message })
   end
 
   # @method: Update the article in the DB according to :id
   # curl -X PUT 127.0.0.1:9292/articles_json/1/edit -d '{}'
   put '/articles_json/:id/edit/?' do
-    begin
-      article = Article.find(self.article_id)
-      article.update(self.data_json)
+    article = Article.find(article_id)
+    article.update(data_json)
 
-      if sinatra_flash_error(article).length > 0 then
-        json_response_db(data: article, message: sinatra_flash_error(article))
-      else
-        json_response_db(data: article, message: 'Current article')
-      end
-    rescue => e
-      json_response(code: 422, data: { error: e.message })
+    if sinatra_flash_error(article).length.positive?
+      json_response_db(data: article, message: sinatra_flash_error(article))
+    else
+      json_response_db(data: article, message: 'Current article')
     end
+  rescue StandardError => e
+    json_response(code: 422, data: { error: e.message })
   end
 
   # @method: Delete the article in the DB according to :id
   # curl -X DELETE 127.0.0.1:9292/articles_json/15/destroy
   delete '/articles_json/:id/destroy/?' do
-    begin
-      article = Article.find(self.article_id)
-      article.destroy
-      json_response(data: { message: "Article deleted successfully!" })
-    rescue => e
-      json_response(code: 422, data: { error: e.message })
-    end
+    article = Article.find(article_id)
+    article.destroy
+    json_response(data: { message: 'Article deleted successfully!' })
+  rescue StandardError => e
+    json_response(code: 422, data: { error: e.message })
   end
 end
