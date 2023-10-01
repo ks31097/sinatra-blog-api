@@ -3,7 +3,7 @@
 require_relative 'application_controller'
 require_relative '../helpers/articles_helper'
 require_relative '../models/article'
-
+require 'pry'
 class ArticleController < ApplicationController
   configure do
     helpers ArticlesHelper
@@ -18,7 +18,7 @@ class ArticleController < ApplicationController
   # $curl 127.0.0.1:9292/articles_json
   get '/articles_json/?' do
     articles = find_articles
-    if articles.to_s.length.positive?
+    if articles.length.positive?
       json_response(data: articles)
     else
       json_response(data: 'No articles have been created yet!')

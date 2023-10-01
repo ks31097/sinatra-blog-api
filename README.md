@@ -21,27 +21,37 @@ You can setup this repository by following this manual
 
 1. Clone the repository
     ```{shell}
-   git clone https://github.com/ks31097/sinatra-blog-api.git
-   ```
+    git clone https://github.com/ks31097/sinatra-blog-api.git
+    ```
 2. Ensure the ruby gems are setup in your machine
-    ```{shell}
-   bundle install
-   ```
+    ```
+    bundle install
+    ```
 3. Perform any pending database migrations
-   ```{shell}
-   rake db:migrate
-   ```
+    ```
+    rake db:migrate
+    ```
 4. Run the application
-    ```{shell}
+    ```
     bundle exec rackup
     ```
 5. Open the application from your browser
     ```
-   http://localhost:9292/hello
-   ```
+    http://localhost:9292/hello
+    ```
+
+## Client URL
+1. Display a small welcome message with the current time
+    ```
+    $curl http://localhost:9292/hello
+    ```
+2. Display all articles
+    ```
+    $curl 127.0.0.1:9292/articles_json
+    ```
+
 ## Application
 This application is a simple web API that allows users to:
-
 - Register a new account.
 - Log in to existing account.
 - Create the article.
@@ -53,8 +63,8 @@ This application is a simple web API that allows users to:
 Database schema definitions.
 
 #### USER
-| COLUMN        | DATA TYPE | DESCRIPTION                           | 
-|---------------|-----------|---------------------------------------|
+| COLUMN          | DATA TYPE | DESCRIPTION                           | 
+|-----------------|-----------|---------------------------------------|
 | id              | Integer   | Unique identifier.                    |
 | full_name       | String    | User full name.                       |
 | email           | String    | User email.                           |
@@ -62,13 +72,13 @@ Database schema definitions.
 | created_at      | Date      | The date the user was created.        |
 | updated_at      | Date      | The date the user was updated.        |
 
-### ROUTES
-1. `/hello` - Presents a simple message with the current time.
+### ROUiTES
+1. `/hello` - Display a small welcome message with the current time.
+2. `/articles_json` - Display all articles.
 
 ## LICENSE
-This repository is distributed under the MIT License
+This repository is distributed under the MIT License.
 
 ## Author
 This repository is maintained by:
-
 - [Kostiantyn Siharov](https://github.com/ks31097) 
