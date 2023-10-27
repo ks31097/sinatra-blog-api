@@ -65,6 +65,13 @@ class ArticleController < ApplicationController
     halt 422, 'Something wrong!'
   end
 
+  # @method not allowed
+  [:put, :delete].each do |method|
+    send(method, '/articles/?') do
+      halt 405
+    end
+  end
+
   # @method: Update the article in the DB according to :id
   put '/articles/:id/edit/?' do
     article = Article.find(article_id)
