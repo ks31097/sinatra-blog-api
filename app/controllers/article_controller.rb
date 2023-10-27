@@ -52,6 +52,8 @@ class ArticleController < ApplicationController
 
   # @method: Add a new article to the DB
   post '/articles/?' do
+    halt 415 unless request.env['CONTENT_TYPE'] == 'application/json'
+
     article = Article.create(data_json(created: true))
     url = "http://localhost:9292/articles/#{article[:id]}"
     response.headers['Location'] = url
@@ -66,7 +68,7 @@ class ArticleController < ApplicationController
   end
 
   # @method not allowed
-  [:put, :delete].each do |method|
+  %i[put delete].each do |method|
     send(method, '/articles/?') do
       halt 405
     end
