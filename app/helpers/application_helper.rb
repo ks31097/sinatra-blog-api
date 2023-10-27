@@ -17,7 +17,8 @@ module ApplicationHelper
       return 'xml' if xml?(type)
     end
 
-    halt 406, 'Not Acceptable'
+    content_type 'text/plain'
+    halt 406, 'application/json, application/xml'
   end
 
   # @api: Format the json response
