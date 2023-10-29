@@ -6,6 +6,7 @@ ruby File.read(".ruby-version").strip
 
 gem "activerecord", "~> 7.0"
 gem "bcrypt", "~> 3.1"
+gem "gyoku", "~> 1.4"
 gem "puma", "~> 6.2"
 gem "rack-protection", "~> 3.0"
 gem "rake", "~> 13.0"
@@ -25,5 +26,3 @@ group :test do
   gem "rspec", "~> 3.12"
   gem "rubocop", "~> 1.55"
 end
-
-

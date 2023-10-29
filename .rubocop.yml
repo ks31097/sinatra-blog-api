@@ -2,8 +2,6 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
   Exclude:
-    - app/controllers/application_controller.rb
-    - app/controllers/user_controller.rb
     - Gemfile
     - Gemfile.lock
     - db/schema.rb

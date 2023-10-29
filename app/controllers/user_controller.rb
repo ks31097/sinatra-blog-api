@@ -9,23 +9,20 @@ class UserController < ApplicationController
     helpers UserHelper
   end
 
-  # $curl -X POST 127.0.0.1:9292/auth/register -d '{}'
-  # @method: json create a new user
+  # @method: Create a new user
   post '/auth/register/?' do
     user = User.create(json_user_data(created: true))
 
-    session[:json_user_id] = user.id
-
-    if sinatra_flash_error(user).length.positive?
-      json_response_db(data: user, message: sinatra_flash_error(user))
-    else
-      json_response(code: 201, data: {
-                      session: session[:json_user_id],
-                      user: user
-                    })
+    if users[user['email'].downcase]
+      message = { message: "User #{user['email']} already in DB!" }
+      halt 409, send_data(json: -> { message },
+                          xml: -> { message })
     end
-  rescue StandartError => e
-    error_response(422, e)
+
+    json_response(user, sinatra_flash_error(user)) if sinatra_flash_error(user).length.positive?
+    status 201
+  rescue StandardError
+    halt 422, 'Something wrong!'
   end
 
   # $curl -X POST 127.0.0.1:9292/auth/register -d '{}'
@@ -36,21 +33,14 @@ class UserController < ApplicationController
     user = User.find_by(email: payload['email'])
 
     if user&.authenticate(payload['password'])
-      session[:json_user_id] = user.id
-      json_response(code: 200, data: {
-                      id: user.id,
-                      email: user.email,
-                      session: session[:json_user_id]
-                    })
+      headers \
+        body 'Access!'
     else
-      json_response(code: 422, data: { message: 'Your email/password combination is not correct!' })
+      status 204
+      headers \
+        body 'Your email/password combination is not correct!'
     end
-  rescue StandartError => e
-    error_response(422, e)
-  end
-
-  get '/log_out/?' do
-    session.clear
-    redirect to '/?'
+  rescue StandardError
+    halt 422, 'Something wrong!'
   end
 end

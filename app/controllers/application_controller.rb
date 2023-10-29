@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 require_relative '../helpers/application_helper'
+require 'pry'
 
 class ApplicationController < Sinatra::Base
   configure do
     helpers ApplicationHelper
-
-    set :views, './app/views'
 
     # __FILE__ is the current file
     set :root, File.dirname(__FILE__)
@@ -26,28 +25,13 @@ class ApplicationController < Sinatra::Base
     register Sinatra::Reloader
   end
 
-  # @api: Format the json response
-  def json_response(code: 200, data: nil)
-    status = [200, 201].include?(code) ? 'SUCCESS' : 'FAILED'
-    headers['Content-Type'] = 'application/json' # content_type :json
-
-    [code, { data: data, message: status }.to_json] if data
-  end
-
-  # @api: Format the json response db
-  def json_response_db(data: nil, message: nil)
-    headers['Content-Type'] = 'application/json' # content_type :json
-
-    { data: data, message: message }.to_json
-  end
-
-  # api: Format JSON error responses
-  def error_response(code, e)
-    json_response(code: code, data: { error: e.message })
+  # @method: Display a small welcome message
+  get '/hello' do
+    "The server is up and running! The current time: #{server_time_run}"
   end
 
   # @api: 404
   not_found do
-    json_response(code: 404, data: { error: 'The page you are looking for is missing' })
+    json_response('The page you are looking for is missing!', 404)
   end
 end

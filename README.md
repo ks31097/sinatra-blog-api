@@ -5,16 +5,15 @@
 
 # Sinatra-Blog
 Sinatra-Blog is a basic API built with ruby's Sinatra DSL. 
-The application has been built with the MVC design pattern.
 
-## Built With
+## Built with
 This application has been built with the following tools:
 - **Ruby `v3.2.1`**
-- **SQlite3**
-- **ActiveRecord**
-- **Rake**
-- **Puma**
-- **Sinatra**
+- **Sinatra `v3.0`**
+- **SQlite3 `v1.6`**
+- **ActiveRecord `v7.0`**
+- **Rake `13.0`**
+- **Puma `v6.2`**
 
 ## Setup
 You can setup this repository by following this manual
@@ -35,10 +34,6 @@ You can setup this repository by following this manual
     ```
     bundle exec rackup
     ```
-5. Open the application from your browser
-    ```
-    http://localhost:9292/hello
-    ```
 
 ## Client URL
 1. Display a small welcome message with the current time
@@ -47,8 +42,25 @@ You can setup this repository by following this manual
     ```
 2. Display all articles
     ```
-    $curl 127.0.0.1:9292/articles_json
+    $curl -i http://localhost:9292/articles \
+     -H "Accept: application/xml;q=0.5, application/json"
     ```
+3. Add a new article to the DB
+    ```
+    $curl -X POST 127.0.0.1:9292/articles/create -d '{}'
+
+    $curl -X POST 127.0.0.1:9292/articles/create -d \
+    '{"id":8,"title":"Article","content":"This is new article","autor":"Autor"}'
+    ```
+    ```
+    $curl -X POST -v http://localhost:9292/articles/  \
+    -H "Content-Type: application/json" \
+    -d '{"title":"The first article", "content":"Article content", "user_id":1}'
+    ```
+4. curl -X PUT 127.0.0.1:9292/articles/1/edit -d '{}'
+5. curl -X DELETE 127.0.0.1:9292/articles/15/destroy
+  # $curl -X POST 127.0.0.1:9292/auth/register -d '{}'
+  # @method: Create a new user
 
 ## Application
 This application is a simple web API that allows users to:
@@ -72,7 +84,7 @@ Database schema definitions.
 | created_at      | Date      | The date the user was created.        |
 | updated_at      | Date      | The date the user was updated.        |
 
-### ROUiTES
+### ROUTES
 1. `/hello` - Display a small welcome message with the current time.
 2. `/articles_json` - Display all articles.
 
