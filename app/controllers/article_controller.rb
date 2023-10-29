@@ -11,30 +11,16 @@ class ArticleController < ApplicationController
 
   # @method: Display all articles
   get '/articles/?' do
-    type = accepted_media_type
-
-    if type == 'json'
-      content_type 'application/json'
-      json_response(response_message(find_articles))
-    elsif type == 'xml'
-      content_type 'application/xml'
-      Gyoku.xml(articles: response_message(find_articles))
-    end
+    send_data(json: -> { response_message(find_articles) },
+              xml: -> { { articles: response_message(find_articles) } })
   rescue StandardError
     halt 422, 'Something wrong!'
   end
 
   # @method: Display the article
   get '/articles/:id/?' do
-    type = accepted_media_type
-
-    if type == 'json'
-      content_type 'application/json'
-      json_response(data: find_article)
-    elsif type == 'xml'
-      content_type 'application/xml'
-      Gyoku.xml(article: find_article)
-    end
+    send_data(json: -> { response_message(find_article) },
+              xml: -> { { articles: response_message(find_article) } })
   rescue StandardError
     halt 422, 'Something wrong!'
   end
