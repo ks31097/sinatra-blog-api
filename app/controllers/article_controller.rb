@@ -34,12 +34,18 @@ class ArticleController < ApplicationController
   post '/articles/?' do
     halt 415 unless request.env['CONTENT_TYPE'] == 'application/json'
 
-    article = Article.create(data_json(created: true))
+    begin
+      article = Article.create(data_json(created: true))
+    rescue JSON::ParserError => e
+      halt 400, send_data(json: -> { { message: e.to_s } },
+                          xml: -> { { message: e.to_s } })
+    end
+
+    json_response(article, sinatra_flash_error(article)) if sinatra_flash_error(article).length.positive?
+
     url = "http://localhost:9292/articles/#{article[:id]}"
     response.headers['Location'] = url
     status 201
-
-    json_response(article, sinatra_flash_error(article)) if sinatra_flash_error(article).length.positive?
   rescue StandardError
     halt 422, 'Something wrong!'
   end
@@ -53,13 +59,15 @@ class ArticleController < ApplicationController
 
   # @method: Update the article in the DB according to :id
   put '/articles/:id/edit/?' do
-    article = Article.find(article_id)
-    article.update(data_json)
-    status article ? 204 : 201
+    begin
+      article = Article.find(article_id)
+    rescue StandardError
+      halt 204
+    end
 
     json_response(article, sinatra_flash_error(article)) if sinatra_flash_error(article).length.positive?
-  rescue StandardError
-    halt 422, 'Something wrong!'
+    article.update(data_json)
+    status 201
   end
 
   # @method: Delete the article in the DB according to :id
