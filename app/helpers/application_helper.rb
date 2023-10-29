@@ -2,8 +2,8 @@
 
 module ApplicationHelper
   # @api: Format the json response
-  def json_response(message)
-    { data: message }.to_json
+  def json_response(message, status)
+    { data: message, error: status }.to_json
   end
 
   def server_time_run

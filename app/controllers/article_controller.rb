@@ -27,13 +27,7 @@ class ArticleController < ApplicationController
 
   # @method: Receiving back information from the GET request by the client
   head '/articles/?' do
-    type = accepted_media_type
-
-    if type == 'json'
-      content_type 'application/json'
-    elsif type == 'xml'
-      content_type 'application/xml'
-    end
+    send_data
   end
 
   # @method: Add a new article to the DB
@@ -46,8 +40,7 @@ class ArticleController < ApplicationController
     status 201
 
     if sinatra_flash_error(article).length.positive?
-      json_response(data: article)
-      json_response(data: sinatra_flash_error(article))
+      json_response(article, sinatra_flash_error(article))
     end
   rescue StandardError
     halt 422, 'Something wrong!'
@@ -67,8 +60,7 @@ class ArticleController < ApplicationController
     status article ? 204 : 201
 
     if sinatra_flash_error(article).length.positive?
-      json_response(data: article)
-      json_response(data: sinatra_flash_error(article))
+      json_response(article, sinatra_flash_error(article))
     end
   rescue StandardError
     halt 422, 'Something wrong!'

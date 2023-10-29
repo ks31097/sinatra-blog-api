@@ -16,10 +16,9 @@ class UserController < ApplicationController
     status 201
 
     if sinatra_flash_error(user).length.positive?
-      json_response(data: user)
-      json_response(sinatra_flash_error(user))
+      json_response(user, sinatra_flash_error(user))
     end
-  rescue StandartError
+  rescue StandardError
     halt 422, 'Something wrong!'
   end
 
@@ -32,13 +31,13 @@ class UserController < ApplicationController
 
     if user&.authenticate(payload['password'])
       headers \
-      body 'Access!'
+        body 'Access!'
     else
       status 204
       headers \
-      body 'Your email/password combination is not correct!'
+        body 'Your email/password combination is not correct!'
     end
-  rescue StandartError
+  rescue StandardError
     halt 422, 'Something wrong!'
   end
 end
