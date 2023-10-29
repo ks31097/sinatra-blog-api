@@ -15,9 +15,7 @@ class UserController < ApplicationController
     # binding.pry
     status 201
 
-    if sinatra_flash_error(user).length.positive?
-      json_response(user, sinatra_flash_error(user))
-    end
+    json_response(user, sinatra_flash_error(user)) if sinatra_flash_error(user).length.positive?
   rescue StandardError
     halt 422, 'Something wrong!'
   end

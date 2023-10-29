@@ -39,9 +39,7 @@ class ArticleController < ApplicationController
     response.headers['Location'] = url
     status 201
 
-    if sinatra_flash_error(article).length.positive?
-      json_response(article, sinatra_flash_error(article))
-    end
+    json_response(article, sinatra_flash_error(article)) if sinatra_flash_error(article).length.positive?
   rescue StandardError
     halt 422, 'Something wrong!'
   end
@@ -59,9 +57,7 @@ class ArticleController < ApplicationController
     article.update(data_json)
     status article ? 204 : 201
 
-    if sinatra_flash_error(article).length.positive?
-      json_response(article, sinatra_flash_error(article))
-    end
+    json_response(article, sinatra_flash_error(article)) if sinatra_flash_error(article).length.positive?
   rescue StandardError
     halt 422, 'Something wrong!'
   end
