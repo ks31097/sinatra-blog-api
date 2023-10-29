@@ -3,6 +3,8 @@
 module ApplicationHelper
   # @api: Format the json response
   def json_response(message, status)
+    content_type :'application/json'
+
     { data: message, error: status }.to_json
   end
 
@@ -15,7 +17,7 @@ module ApplicationHelper
   end
 
   # @sinatra-flash errors format
-  def sinatra_flash_error(object)
-    object.errors.full_messages
+  def sinatra_flash_error(data)
+    data.errors.full_messages
   end
 end

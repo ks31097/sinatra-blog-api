@@ -32,6 +32,6 @@ class ApplicationController < Sinatra::Base
 
   # @api: 404
   not_found do
-    json_response(code: 404, data: { error: 'The page you are looking for is missing' })
+    json_response('The page you are looking for is missing!', 404)
   end
 end
