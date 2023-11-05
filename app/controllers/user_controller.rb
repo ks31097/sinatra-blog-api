@@ -13,12 +13,6 @@ class UserController < ApplicationController
   post '/auth/register/?' do
     user = User.create(json_user_data(created: true))
 
-    if users[user['email'].downcase]
-      message = { message: "User #{user['email']} already in DB!" }
-      halt 409, send_data(json: -> { message },
-                          xml: -> { message })
-    end
-
     json_response(user, sinatra_flash_error(user)) if sinatra_flash_error(user).length.positive?
     status 201
   rescue StandardError
