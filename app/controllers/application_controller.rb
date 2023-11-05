@@ -27,6 +27,8 @@ class ApplicationController < Sinatra::Base
 
   # @method: Display a small welcome message
   get '/hello' do
+    content_type 'text/plain'
+
     "The server is up and running! The current time: #{server_time_run}"
   end
 
