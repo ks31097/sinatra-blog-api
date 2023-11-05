@@ -19,7 +19,7 @@ This application has been built with the following tools:
 You can setup this repository by following this manual
 
 1. Clone the repository
-    ```{shell}
+    ```
     git clone https://github.com/ks31097/sinatra-blog-api.git
     ```
 2. Ensure the ruby gems are setup in your machine
@@ -28,7 +28,7 @@ You can setup this repository by following this manual
     ```
 3. Perform any pending database migrations
     ```
-    rake db:migrate
+    bundle exec rake db:migrate
     ```
 4. Run the application
     ```
@@ -45,22 +45,29 @@ You can setup this repository by following this manual
     $curl -i http://localhost:9292/articles \
      -H "Accept: application/xml;q=0.5, application/json"
     ```
-3. Add a new article to the DB
+3. Display the article:
     ```
-    $curl -X POST 127.0.0.1:9292/articles/create -d '{}'
-
-    $curl -X POST 127.0.0.1:9292/articles/create -d \
-    '{"id":8,"title":"Article","content":"This is new article","autor":"Autor"}'
+    $curl -i http://localhost:9292/articles/1 \
+     -H "Accept: application/xml;q=0.5, application/json"
     ```
+4. Add a new article to the DB:
     ```
     $curl -X POST -v http://localhost:9292/articles/  \
     -H "Content-Type: application/json" \
-    -d '{"title":"The first article", "content":"Article content", "user_id":1}'
+    -d '{"title":"The first article", "content":"The article content", "user_id":1}'
     ```
-4. curl -X PUT 127.0.0.1:9292/articles/1/edit -d '{}'
-5. curl -X DELETE 127.0.0.1:9292/articles/15/destroy
-  # $curl -X POST 127.0.0.1:9292/auth/register -d '{}'
-  # @method: Create a new user
+5. Update the article in the DB (using the article number):
+    ```
+    $curl -X PUT http://localhost:9292/articles/1/edit -d '{}'
+    ```
+6. Delete the article (using the article number):
+    ```
+    $curl -X DELETE http://localhost:9292/articles/1/destroy
+    ```
+7.  Create a new account:
+    ```
+    $curl -X POST http://localhost:9292/auth/register -d '{}'
+    ```
 
 ## Application
 This application is a simple web API that allows users to:
@@ -83,6 +90,20 @@ Database schema definitions.
 | password_digest | String    | User password hashed with `BCrypt`.   |
 | created_at      | Date      | The date the user was created.        |
 | updated_at      | Date      | The date the user was updated.        |
+
+User has many articles.
+
+#### ARTICLE
+| COLUMN          | DATA TYPE | DESCRIPTION                           |
+|-----------------|-----------|---------------------------------------|
+| id              | Integer   | Unique identifier.                    |
+| title           | String    | The article title.                    |
+| content         | text      | The article content.                  |
+| user_id         | Integer   | The index article on the user id.     |
+| created_at      | Date      | The date the user was created.        |
+| updated_at      | Date      | The date the user was updated.        |
+
+The article belongs to the user.
 
 ### ROUTES
 1. `/hello` - Display a small welcome message with the current time.
