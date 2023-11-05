@@ -12,11 +12,11 @@ module ArticlesHelper
   end
 
   def response_message(find_data)
-    if find_data.length.positive?
-      find_data.as_json
-    else
-      'No articles have been created yet!'
-    end
+    find_data.as_json
+
+    content_type 'text/plain'
+    return 'Perform any pending database migrations!' unless database_exists('articles')
+    return 'No articles have been created yet!' unless find_data.length.positive?
   end
 
   def json_or_default?(type)
