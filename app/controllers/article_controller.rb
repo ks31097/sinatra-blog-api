@@ -25,7 +25,7 @@ class ArticleController < ApplicationController
     halt 422, 'Something wrong!'
   end
 
-  # @method: Receiving back information from the GET request by the client
+  # @method: Receiving back information from the GET request
   head '/articles/?' do
     send_data
   end
@@ -35,17 +35,19 @@ class ArticleController < ApplicationController
     halt 415 unless request.env['CONTENT_TYPE'] == 'application/json'
 
     begin
-      article = Article.create(data_json(created: true))
+      article = Article.new(data_json(created: true))
     rescue JSON::ParserError => e
       halt 400, send_data(json: -> { { message: e.to_s } },
                           xml: -> { { message: e.to_s } })
     end
 
-    json_response(article, sinatra_flash_error(article)) if sinatra_flash_error(article).length.positive?
-
-    url = "http://localhost:9292/articles/#{article[:id]}"
-    response.headers['Location'] = url
-    status 201
+    if article.save
+      url = "http://localhost:9292/articles/#{article[:id]}"
+      response.headers['Location'] = url
+      status 201
+    else
+      json_response(article, sinatra_flash_error(article))
+    end
   rescue StandardError
     halt 422, 'Something wrong!'
   end
@@ -65,9 +67,11 @@ class ArticleController < ApplicationController
       halt 204
     end
 
-    json_response(article, sinatra_flash_error(article)) if sinatra_flash_error(article).length.positive?
-    article.update(data_json)
-    status 201
+    if article.update(data_json)
+      status 201
+    else
+      json_response(article, sinatra_flash_error(article))
+    end
   end
 
   # @method: Delete the article in the DB according to :id

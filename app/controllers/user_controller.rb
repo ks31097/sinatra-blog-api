@@ -13,21 +13,15 @@ class UserController < ApplicationController
   post '/auth/register/?' do
     user = User.create(json_user_data(created: true))
 
-    if users[user['email'].downcase]
-      message = { message: "User #{user['email']} already in DB!" }
-      halt 409, send_data(json: -> { message },
-                          xml: -> { message })
-    end
-
     json_response(user, sinatra_flash_error(user)) if sinatra_flash_error(user).length.positive?
     status 201
   rescue StandardError
     halt 422, 'Something wrong!'
   end
 
-  # $curl -X POST 127.0.0.1:9292/auth/register -d '{}'
-  # @method: log in user using email and password
+  # @method: log in user
   post '/auth/login' do
+    redirect to(new_url('/info')), 307
     payload = json_user_data # payload['email'], payload['password']
 
     user = User.find_by(email: payload['email'])
@@ -42,5 +36,9 @@ class UserController < ApplicationController
     end
   rescue StandardError
     halt 422, 'Something wrong!'
+  end
+
+  get '/info' do
+    body "Method 'Log_in' will be added in fuature updates"
   end
 end
