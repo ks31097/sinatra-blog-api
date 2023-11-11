@@ -19,9 +19,9 @@ class UserController < ApplicationController
     halt 422, 'Something wrong!'
   end
 
-  # $curl -X POST 127.0.0.1:9292/auth/register -d '{}'
-  # @method: log in user using email and password
+  # @method: log in user
   post '/auth/login' do
+    redirect to(new_url('/info')), 307
     payload = json_user_data # payload['email'], payload['password']
 
     user = User.find_by(email: payload['email'])
@@ -36,5 +36,9 @@ class UserController < ApplicationController
     end
   rescue StandardError
     halt 422, 'Something wrong!'
+  end
+
+  get '/info' do
+    body "Method 'Log_in' will be added in fuature updates"
   end
 end

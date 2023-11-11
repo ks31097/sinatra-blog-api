@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module UserHelper
+  def new_url(url)
+    url
+  end
+
   private
 
   # @helper: parse user JSON data
