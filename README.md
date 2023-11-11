@@ -68,6 +68,10 @@ You can setup this repository by following this manual
     ```
     $curl -X POST http://localhost:9292/auth/register -d '{}'
     ```
+8. ~~ Method log in (using email and password)~~
+    ```
+    ~~$curl -X POST 127.0.0.1:9292/auth/register -d '{}'~~
+    ```
 
 ## Application
 This application is a simple web API that allows users to:
