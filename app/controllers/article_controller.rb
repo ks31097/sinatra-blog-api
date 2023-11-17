@@ -13,16 +13,12 @@ class ArticleController < ApplicationController
   get '/articles/?' do
     send_data(json: -> { response_message(find_articles) },
               xml: -> { { articles: response_message(find_articles) } })
-  rescue StandardError
-    halt 422, 'Something wrong!'
   end
 
   # @method: Display the article
   get '/articles/:id/?' do
     send_data(json: -> { response_message(find_article) },
               xml: -> { { articles: response_message(find_article) } })
-  rescue StandardError
-    halt 422, 'Something wrong!'
   end
 
   # @method: Receiving back information from the GET request
@@ -48,8 +44,6 @@ class ArticleController < ApplicationController
     else
       json_response(article, sinatra_flash_error(article))
     end
-  rescue StandardError
-    halt 422, 'Something wrong!'
   end
 
   # @method not allowed
@@ -79,7 +73,5 @@ class ArticleController < ApplicationController
     article = Article.find(article_id)
     article.destroy
     status 204
-  rescue StandardError
-    halt 422, 'Something wrong!'
   end
 end
