@@ -19,6 +19,8 @@ class ApplicationController < Sinatra::Base
     use Rack::Protection
 
     register Sinatra::Flash
+
+    set :show_exceptions, false
   end
 
   configure :development do
@@ -35,5 +37,9 @@ class ApplicationController < Sinatra::Base
   # @api: 404
   not_found do
     json_response('The page you are looking for is missing!', 404)
+  end
+
+  error do
+    'Internal server error'
   end
 end

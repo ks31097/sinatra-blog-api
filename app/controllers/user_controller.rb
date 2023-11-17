@@ -15,8 +15,6 @@ class UserController < ApplicationController
 
     json_response(user, sinatra_flash_error(user)) if sinatra_flash_error(user).length.positive?
     status 201
-  rescue StandardError
-    halt 422, 'Something wrong!'
   end
 
   # @method: log in user
@@ -34,8 +32,6 @@ class UserController < ApplicationController
       headers \
         body 'Your email/password combination is not correct!'
     end
-  rescue StandardError
-    halt 422, 'Something wrong!'
   end
 
   get '/info' do
